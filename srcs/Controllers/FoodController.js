@@ -24,6 +24,7 @@ import {
   RESTAURANT_NOT_EXIST,
   USER_NOT_EXIST,
 } from "../utils/messageUtils.js";
+import restaurant from "../Models/Restaurant.js";
 
 const model = initModels(sequelize);
 
@@ -72,9 +73,11 @@ export const FoodController = {
     
     if(await FoodController.checkRestaurant(resId)){
         let data = await model.like_res.findAll({
+            attributes: ['date_like'],
             where: {
               res_id: resId,
             },
+            include: ['restaurant','user']
           });
       
           data.length > 0
@@ -89,9 +92,11 @@ export const FoodController = {
     let { userId } = req.params;
     if(await FoodController.checkUser(userId)){
         let data = await model.like_res.findAll({
+          attributes: ['date_like'],
             where: {
               user_id: userId,
             },
+            include: ['restaurant','user']
           });
       
           data.length > 0
@@ -172,9 +177,11 @@ export const FoodController = {
 
     if(await FoodController.checkUser(userId)){
         let data = await model.rate_res.findAll({
+          attributes: ['amount','date_rate'],
             where: {
               user_id: userId,
             },
+            include: ['restaurant','user']
           });
       
           data.length > 0
@@ -190,9 +197,11 @@ export const FoodController = {
 
     if(await FoodController.checkRestaurant(resId)){
         let data = await model.rate_res.findAll({
+          attributes: ['amount','date_rate'],
             where: {
               res_id: resId,
             },
+            include: ['restaurant','user']
           });
       
           data.length > 0
