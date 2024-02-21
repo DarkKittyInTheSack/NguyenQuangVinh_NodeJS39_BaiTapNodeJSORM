@@ -23,6 +23,10 @@ export default class user extends Model{
                 allowNull: false,
                 type: DataTypes.STRING(100)
             },
+            refresh_token:{
+                allowNull: false,
+                type: DataTypes.STRING(10000)
+            }
         },{
             sequelize,
             tableName: 'user',

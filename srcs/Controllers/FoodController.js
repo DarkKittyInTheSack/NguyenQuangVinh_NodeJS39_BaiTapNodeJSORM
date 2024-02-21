@@ -24,7 +24,9 @@ import {
   RESTAURANT_NOT_EXIST,
   USER_NOT_EXIST,
 } from "../utils/messageUtils.js";
-import restaurant from "../Models/Restaurant.js";
+import { jwtoken } from "../Configs/jwt.js";
+import { where } from "sequelize";
+import { TOKEN_CREATED } from "../utils/jwtMessageUtil.js";
 
 const model = initModels(sequelize);
 
@@ -66,6 +68,35 @@ export const FoodController = {
 
     data.length > 0 ? isExist = true : isExist = false;
     return isExist
+  },
+
+  encryptUserId: async (req,res) =>{
+      let {userId} = req.params;
+
+      if(await FoodController.checkUser(userId)){
+        let data = await model.user.findOne({
+          where: {
+            user_id: userId
+          }
+        })
+        let keyTime = new Date().getTime()
+        let userToken = jwtoken.createJwtToken({userId: data.dataValues.user_id,keyTime})
+        let userTokenRefresh = jwtoken.createRefreshToken({userId: data.dataValues.user_id,keyTime})
+
+        data.dataValues.refresh_token = userTokenRefresh
+
+        await model.user.update(data.dataValues,{
+          where:{
+            user_id: data.dataValues.user_id
+          }
+        })
+
+        localStorage.setItem('token',JSON.stringify(userToken))
+        
+        responseApi(res, 200, userToken, TOKEN_CREATED);
+      }else{
+        responseApi(res, 404, {}, USER_NOT_EXIST);
+      }
   },
 
   getLikeByRestaurant: async (req, res) => {
