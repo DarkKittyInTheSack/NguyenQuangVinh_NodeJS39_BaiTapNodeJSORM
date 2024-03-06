@@ -4,9 +4,6 @@ import { FoodController } from '../Controllers/FoodController.js'
 
 const foodRoute = express.Router()
 
-//encript user id for like,unlike,rate,insert order
-foodRoute.get('/encript/:userId',FoodController.encryptUserId)
-
 foodRoute.get('/get-like/:resId', FoodController.getLikeByRestaurant);
 foodRoute.get('/get-like-user/:userId', FoodController.getLikeByUserID);
 foodRoute.get('/get-rate-user/:userId', FoodController.getRateByUser);

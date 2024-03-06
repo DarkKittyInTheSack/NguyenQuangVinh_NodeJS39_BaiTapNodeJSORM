@@ -21,7 +21,6 @@ import {
   RESTAURANT_NOT_EXIST,
   USER_NOT_EXIST,
 } from "../utils/messageUtils.js";
-import { TOKEN_CREATED } from "../utils/jwtMessageUtil.js";
 
 const model = initModels(sequelize);
 
@@ -39,6 +38,7 @@ export const FoodController = {
     data.length > 0 ? isExist = true : isExist = false;
     return isExist
   },
+  
   checkRestaurant: async (resId) => {
     let isExist = false;
 
